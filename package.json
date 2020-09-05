@@ -1,0 +1,35 @@
+{
+    "name": "gm-compat",
+    "version": "0.1",
+    "description": "Portable modifications to page properties (unsafeWindow) for userscripts",
+    "jsdelivr": "index.min.js",
+    "main": "index.js",
+    "repository": "https://github.com/chocolateboy/gm-compat",
+    "author": "chocolateboy",
+    "license": "Artistic-2.0",
+    "scripts": {
+        "build:old": "terser --compress passes=2,reduce_vars=false,keep_fnames=true --mangle reserved=['require'] -o index.min.js < index.js",
+        "build": "terser --compress passes=2,reduce_vars=false --mangle -o index.min.js < index.js",
+        "doctoc": "markdown-toc --bullets=- -i README.md"
+    },
+    "files": [
+        "index.js",
+        "index.min.js"
+    ],
+    "devDependencies": {
+        "markdown-toc": "^1.2.0",
+        "terser": "^5.3.0"
+    },
+    "keywords": [
+        "clone-into",
+        "export-function",
+        "greasemonkey",
+        "shim",
+        "tampermonkey",
+        "unsafe-window",
+        "userscript",
+        "userscripts",
+        "violentmonkey",
+        "wrapped-js-object"
+    ]
+}
