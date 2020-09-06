@@ -42,7 +42,7 @@ gm-compat - portable monkey-patching for userscripts
 // @name          My Userscript
 // @description   A userscript which hooks XMLHttpRequest#open
 // @include       https://www.example.com/*
-// @require       https://cdn.jsdelivr.net/gh/chocolateboy/gm-compat@0.1.0/index.min.js
+// @require       https://cdn.jsdelivr.net/gh/chocolateboy/gm-compat@0.1.1/index.min.js
 // ==/UserScript==
 
 const xhrProto = GMCompat.unsafeWindow.XMLHttpRequest.prototype
@@ -204,7 +204,7 @@ The following NPM scripts are available:
 
 # VERSION
 
-0.1.0
+0.1.1
 
 # AUTHOR
 
@@ -222,6 +222,6 @@ terms of the [Artistic License 2.0](https://www.opensource.org/licenses/artistic
 [exportFunction]: https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Language_Bindings/Components.utils.exportFunction
 [gm4-polyfill]: https://github.com/greasemonkey/gm4-polyfill
 [grant-none]: https://github.com/greasemonkey/greasemonkey/issues/3015#issuecomment-436645719
-[jsDelivr]: https://cdn.jsdelivr.net/gh/chocolateboy/gm-compat@0.1.0/index.min.js
+[jsDelivr]: https://cdn.jsdelivr.net/gh/chocolateboy/gm-compat@0.1.1/index.min.js
 [unsafeWindow]: https://sourceforge.net/p/greasemonkey/wiki/unsafeWindow/
 [xhr#open]: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/open
