@@ -96,7 +96,7 @@ can have its own isolated version of gm-compat without conflicts.
 ## Why?
 
 Because writing cross-engine code which mutates page properties is fiddly and
-non-obvious. This shim aims to abstract away the inconsistencies and
+verbose. This shim aims to abstract away the inconsistencies and
 incompatibilities so that scripts don't need to reinvent it.
 
 ## Why not?
