@@ -1,4 +1,4 @@
-## 0.1.0 - TBD
+## 0.1.0 - 2020-09-06
 
 - add an `export` shortcut which infers the right function and targets
   `unsafeWindow`
