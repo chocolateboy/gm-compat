@@ -36,7 +36,7 @@ gm-compat - portable modifications to page properties (`unsafeWindow`) for users
 // @name          My Userscript
 // @description   A userscript which hooks XMLHttpRequest#open
 // @include       https://www.example.com/*
-// @require       https://cdn.jsdelivr.net/gh/chocolateboy/gm-compat@0.1/index.min.js
+// @require       https://cdn.jsdelivr.net/gh/chocolateboy/gm-compat@0.0.1/index.min.js
 // ==/UserScript==
 
 function hookXHROpen (oldOpen) {
@@ -108,7 +108,7 @@ The following NPM scripts are available:
 
 # VERSION
 
-0.1
+0.0.1
 
 # AUTHOR
 

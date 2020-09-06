@@ -1,6 +1,6 @@
 {
     "name": "gm-compat",
-    "version": "0.1",
+    "version": "0.0.1",
     "description": "Portable modifications to page properties (unsafeWindow) for userscripts",
     "jsdelivr": "index.min.js",
     "main": "index.js",
