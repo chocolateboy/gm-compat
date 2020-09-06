@@ -10,6 +10,7 @@
   - [Why not?](#why-not)
 - [API](#api)
   - [cloneInto](#cloneinto)
+  - [export](#export)
   - [exportFunction](#exportfunction)
   - [unsafeWindow](#unsafewindow)
 - [COMPATIBILITY](#compatibility)
@@ -31,7 +32,7 @@ gm-compat - portable monkey-patching for userscripts
   - [`unsafeWindow`][unsafeWindow]
   - [`cloneInto`][cloneInto]
   - [`exportFunction`][exportFunction]
-- &lt; 350 B minified
+- ~ 400 B minified
 - CDN build ([jsDelivr][])
 
 # USAGE
@@ -44,26 +45,18 @@ gm-compat - portable monkey-patching for userscripts
 // @require       https://cdn.jsdelivr.net/gh/chocolateboy/gm-compat@0.0.2/index.min.js
 // ==/UserScript==
 
-function hookXHROpen (oldOpen) {
-    return function open (method, url) {
-        if (match(url)) {
-            // register a new listener
-            this.addEventListener('load', () => {
-                process(this.responseText)
-            })
-        }
+const xhrProto = GMCompat.unsafeWindow.XMLHttpRequest.prototype
+const oldOpen = XMLHttpRequest.prototype.open
 
-        return oldOpen.apply(this, arguments)
-    }
+function open (method, url) {
+    this.addEventListener('load', () => {
+        process(this.responseText)
+    })
+
+    return oldOpen.apply(this, arguments)
 }
 
-const xhrProto = GMCompat.unsafeWindow.XMLHttpRequest.prototype
-const oldOpen = XMLHttpRequest.prototype.open // XXX must be the wrapped version
-
-xhrProto.open = GMCompat.exportFunction(
-    hookXHROpen(oldOpen),
-    GMCompat.unsafeWindow
-)
+xhrProto.open = GMCompat.export(open)
 ```
 
 # DESCRIPTION
@@ -71,23 +64,22 @@ xhrProto.open = GMCompat.exportFunction(
 gm-compat is a tiny compatibility shim which provides uniform, cross-engine
 access to [`unsafeWindow`][unsafeWindow], [`cloneInto`][cloneInto] and
 [`exportFunction`][exportFunction] for userscripts. These can be used to
-portably modify window properties, e.g. to hook
+portably modify page properties, e.g. to hook
 [`XMLHttpRequest#open`][xhr#open] to intercept HTTP requests.
 
 Modifications to a page's window (`unsafeWindow`) need to use the `cloneInto`
-and `exportFunction` functions in userscript engines on Firefox. However, these
-functions are not available by default in Chrome. In addition, `unsafeWindow`
-is not the actual `unsafeWindow` object in all engines.
+and `exportFunction` functions on Firefox. However, these functions are not
+available by default in Chrome. In addition, `unsafeWindow` is not the actual
+`unsafeWindow` object in all engines.
 
 Since the functions are needed on Firefox, the options for writing portable
 scripts which modify page properties are either to implement
-browser/engine-specific code in each script or to use a shim which exposes a
-uniform API that works with all engines. gm-compat provides an implementation
-of the latter.
+browser/engine-specific code in each script or to use a shim which exposes an
+API that works with all engines. gm-compat provides an implementation of the
+latter.
 
-When the functions are not needed (e.g. on most Chrome engines), they're
-implemented as pass-through (identity) functions, so they work consistently in
-all cases.
+When the functions are not needed (i.e. in Chrome), they're implemented as
+pass-through (identity) functions, so they work consistently in all cases.
 
 Note that `GMCompat` is a local variable (declared with `const`), not a
 property of the window object. This ensures that each script running on a page
@@ -96,7 +88,7 @@ can have its own isolated version of gm-compat without conflicts.
 ## Why?
 
 Because writing cross-engine code which mutates page properties is fiddly and
-verbose. This shim aims to abstract away the inconsistencies and
+long-winded. This shim aims to abstract away the inconsistencies and
 incompatibilities so that scripts don't need to reinvent it.
 
 ## Why not?
@@ -124,6 +116,36 @@ GMCompat.unsafeWindow.performance = GMCompat.cloneInto(
 )
 ```
 
+## export
+
+A wrapper function which delegates to [`cloneInto`](#cloneinto) or
+[`exportFunction`](exportFunction), depending on the type of its argument,
+passing `GMCompat.unsafeWindow` as the second argument, i.e.:
+
+```javascript
+const fn = () => { ... }
+GMCompat.export(fn)
+```
+
+is equivalent to:
+
+```javascript
+GMCompat.exportInto(fn, GMCompat.unsafeWindow)
+```
+
+and:
+
+```javascript
+const obj = { ... }
+GMCompat.export(obj)
+```
+
+is equivalent to:
+
+```javascript
+GMCompat.cloneInto(obj, GMCompat.unsafeWindow)
+```
+
 ## exportFunction
 
 Portable access to Firefox's [`exportFunction`][exportFunction] function, which
@@ -133,10 +155,7 @@ context.
 ```javascript
 function log () { }
 
-GMCompat.unsafeWindow.log = GMCompat.exportFunction(
-    log,
-    GMCompat.unsafeWindow
-)
+GMCompat.unsafeWindow.log = GMCompat.exportFunction(log, GMCompat.unsafeWindow)
 ```
 
 ## unsafeWindow

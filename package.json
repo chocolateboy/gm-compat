@@ -8,7 +8,8 @@
     "main": "index.js",
     "jsdelivr": "index.min.js",
     "scripts": {
-        "build": "terser --ecma 2015 --compress --mangle -o index.min.js < index.js",
+        "build:old": "terser --ecma 2015 --compress reduce_vars=true --mangle -o index.min.js < index.js",
+        "build": "terser --ecma 2015 --compress reduce_vars=false --mangle -o index.min.js < index.js",
         "doctoc": "markdown-toc --bullets=- --maxdepth 3 -i README.md"
     },
     "files": [
