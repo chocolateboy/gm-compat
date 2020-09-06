@@ -1,6 +1,6 @@
 {
     "name": "gm-compat",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Portable monkey-patching for userscripts",
     "author": "chocolateboy",
     "repository": "https://github.com/chocolateboy/gm-compat",
