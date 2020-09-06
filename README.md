@@ -118,9 +118,13 @@ GMCompat.unsafeWindow.performance = GMCompat.cloneInto(
 
 ## export
 
+**Type**:
+- `<T extends Function>(value: T) ⇒ T`
+- `<T extends object>(value: T) ⇒ T`
+
 A wrapper function which delegates to [`cloneInto`](#cloneinto) or
-[`exportFunction`](exportFunction), depending on the type of its argument,
-passing `GMCompat.unsafeWindow` as the second argument, i.e.:
+[`exportFunction`](#exportFunction), depending on the type of its argument,
+passing [`GMCompat.unsafeWindow`](#unsafeWindow) as the second argument, i.e.:
 
 ```javascript
 const fn = () => { ... }
@@ -130,7 +134,7 @@ GMCompat.export(fn)
 is equivalent to:
 
 ```javascript
-GMCompat.exportInto(fn, GMCompat.unsafeWindow)
+GMCompat.exportFunction(fn, GMCompat.unsafeWindow)
 ```
 
 and:

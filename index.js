@@ -3,7 +3,8 @@ const GMCompat = (function () {
     const { freeze, assign } = Object
     const GMCompat = { unsafeWindow }
     const $function = 'function'
-    const $unsafeWindow = unsafeWindow
+
+    let $unsafeWindow = unsafeWindow
 
     /*
      * these functions are only needed by Violentmonkey for Firefox and
@@ -17,7 +18,7 @@ const GMCompat = (function () {
 
         if (wrappedJSObject) {
             // Violentmonkey for Firefox
-            GMCompat.unsafeWindow = wrappedJSObject
+            GMCompat.unsafeWindow = $unsafeWindow = wrappedJSObject
         }
     } else {
         assign(GMCompat, {
