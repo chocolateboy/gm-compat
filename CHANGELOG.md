@@ -1,3 +1,7 @@
+## 0.1.2 - TBD
+
+- documentation tweaks
+
 ## 0.1.1 - 2020-09-06
 
 - fix `export`'s `unsafeWindow` default

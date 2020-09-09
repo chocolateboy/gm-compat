@@ -1,8 +1,8 @@
 const GMCompat = (function () {
     // minification helpers
     const { freeze, assign } = Object
-    const GMCompat = { unsafeWindow }
     const $function = 'function'
+    const GMCompat = { unsafeWindow }
 
     let $unsafeWindow = unsafeWindow
 

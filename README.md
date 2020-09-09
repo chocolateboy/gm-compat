@@ -61,11 +61,11 @@ xhrProto.open = GMCompat.export(open)
 
 # DESCRIPTION
 
-gm-compat is a tiny compatibility shim which provides uniform, cross-engine
-access to [`unsafeWindow`][unsafeWindow], [`cloneInto`][cloneInto] and
-[`exportFunction`][exportFunction] for userscripts. These can be used to
-portably modify page properties, e.g. to hook
-[`XMLHttpRequest#open`][xhr#open] to intercept HTTP requests.
+gm-compat is a tiny compatibility shim for userscripts which provides uniform,
+cross-engine access to [`unsafeWindow`][unsafeWindow], [`cloneInto`][cloneInto]
+and [`exportFunction`][exportFunction]. These can be used to portably modify
+page properties, e.g. to hook [`XMLHttpRequest#open`][xhr#open] to intercept
+HTTP requests.
 
 Modifications to a page's window (`unsafeWindow`) need to use the `cloneInto`
 and `exportFunction` functions on Firefox. However, these functions are not
