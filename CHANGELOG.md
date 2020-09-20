@@ -1,4 +1,4 @@
-## 0.1.2 - TBD
+## 0.1.2 - 2020-09-20
 
 - documentation tweaks
 
