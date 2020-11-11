@@ -1,6 +1,6 @@
 # gm-compat
 
-<!-- toc -->
+<!-- TOC -->
 
 - [NAME](#name)
 - [FEATURES](#features)
@@ -20,7 +20,7 @@
 - [AUTHOR](#author)
 - [COPYRIGHT AND LICENSE](#copyright-and-license)
 
-<!-- tocstop -->
+<!-- TOC END -->
 
 # NAME
 
@@ -189,12 +189,13 @@ gm-compat has been tested on the following engines:
 
 <details>
 
+<!-- TOC:ignore -->
 ## NPM Scripts
 
 The following NPM scripts are available:
 
 - build - generate the minified build of the library (index.min.js)
-- doctoc - update the table-of-contents (TOC) in the README
+- build:doc - generate the README's TOC (table of contents)
 
 </details>
 
