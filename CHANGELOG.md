@@ -1,3 +1,16 @@
+## 1.0.0 - TBD
+
+### Breaking Changes
+
+- `cloneInto` and `exportFunction` now take an optional options object with a
+  `target` field for the target (default: `unsafeWindow`) rather than separate
+  target and options parameters
+- `cloneInto` (and its `export` wrapper) defaults to `{ cloneFunctions: true, wrapReflectors: true }`
+
+### Features
+
+- add `unwrap` to access the wrapped object on Firefox
+
 ## 0.1.2 - 2020-09-20
 
 - documentation tweaks

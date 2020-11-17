@@ -8,11 +8,13 @@
 - [DESCRIPTION](#description)
   - [Why?](#why)
   - [Why not?](#why-not)
+- [TYPES](#types)
 - [API](#api)
   - [cloneInto](#cloneinto)
   - [export](#export)
   - [exportFunction](#exportfunction)
   - [unsafeWindow](#unsafewindow)
+  - [unwrap](#unwrap)
 - [COMPATIBILITY](#compatibility)
 - [DEVELOPMENT](#development)
 - [SEE ALSO](#see-also)
@@ -32,7 +34,7 @@ gm-compat - portable monkey-patching for userscripts
   - [`unsafeWindow`][unsafeWindow]
   - [`cloneInto`][cloneInto]
   - [`exportFunction`][exportFunction]
-- ~ 400 B minified
+- ~ 600 B minified
 - CDN build ([jsDelivr][])
 
 # USAGE
@@ -46,14 +48,14 @@ gm-compat - portable monkey-patching for userscripts
 // ==/UserScript==
 
 const xhrProto = GMCompat.unsafeWindow.XMLHttpRequest.prototype
-const oldOpen = XMLHttpRequest.prototype.open
+const oldOpen = xhrProto.open
 
-function open (method, url) {
+function open (method, url, ...rest) {
     this.addEventListener('load', () => {
         process(this.responseText)
     })
 
-    return oldOpen.apply(this, arguments)
+    return oldOpen.call(this, method, url, ...rest)
 }
 
 xhrProto.open = GMCompat.export(open)
@@ -87,7 +89,7 @@ can have its own isolated version of gm-compat without conflicts.
 
 ## Why?
 
-Because writing cross-engine code which mutates page properties is fiddly and
+Because writing portable code which modifies page properties is error-prone and
 long-winded. This shim aims to abstract away the inconsistencies and
 incompatibilities so that scripts don't need to reinvent it.
 
@@ -98,9 +100,33 @@ are able to operate directly in the page context (i.e. `@grant none`), although
 note that `@grant none` is [not supported][grant-none] by all engines, and
 `@grant none` (and `unsafeWindow`) doesn't portably work on [all sites][csp].
 
+# TYPES
+
+The following types are referenced in the descriptions below.
+
+```typescript
+type CloneIntoOptions = {
+    cloneFunctions?: boolean;
+    target?: object;
+    wrapReflectors?: boolean;
+};
+
+type ExportOptions = {
+    target?: object;
+};
+
+type ExportFunctionOptions = {
+    allowCrossOriginArguments?: boolean;
+    defineAs?: string;
+    target?: object;
+};
+```
+
 # API
 
 ## cloneInto
+
+**Type**: `<T extends object>(object: T, options?: CloneIntoOptions) ⇒ T`
 
 Portable access to Firefox's [`cloneInto`][cloneInto] function, which returns a
 version of the supplied object that can be accessed in the provided context.
@@ -110,21 +136,26 @@ const dummyPerformance = {
     now () { ... }
 }
 
-GMCompat.unsafeWindow.performance = GMCompat.cloneInto(
-    dummyPerformance,
-    GMCompat.unsafeWindow
-)
+GMCompat.unsafeWindow.performance = GMCompat.cloneInto(dummyPerformance)
 ```
+
+If no options are supplied, the default values are:
+
+```javascript
+{ cloneFunctions: true, target: GMCompat.unsafeWindow, wrapReflectors: true }
+```
+
+If supplied, they are merged into/override the defaults.
 
 ## export
 
 **Type**:
-- `<T extends Function>(value: T) ⇒ T`
-- `<T extends object>(value: T) ⇒ T`
+- `<T extends Function>(value: T, options?: ExportOptions) ⇒ T`
+- `<T extends object>(value: T, options?: ExportOptions) ⇒ T`
 
 A wrapper function which delegates to [`cloneInto`](#cloneinto) or
 [`exportFunction`](#exportFunction), depending on the type of its argument,
-passing [`GMCompat.unsafeWindow`](#unsafeWindow) as the second argument, i.e.:
+i.e.:
 
 ```javascript
 const fn = () => { ... }
@@ -134,7 +165,7 @@ GMCompat.export(fn)
 is equivalent to:
 
 ```javascript
-GMCompat.exportFunction(fn, GMCompat.unsafeWindow)
+GMCompat.exportFunction(fn)
 ```
 
 and:
@@ -147,10 +178,21 @@ GMCompat.export(obj)
 is equivalent to:
 
 ```javascript
-GMCompat.cloneInto(obj, GMCompat.unsafeWindow)
+GMCompat.cloneInto(obj)
+```
+
+An optional options object can be supplied to override the default target
+([`unsafeWindow`](#unsafeWindow)). This is passed as the options parameter to
+[`cloneInto`](#cloneInto) or [`exportFunction`](#exportFunction) and merged
+into their default options.
+
+```javascript
+GMCompat.export(obj, { target: iframe })
 ```
 
 ## exportFunction
+
+**Type**: `<T extends Function>(value: T, options?: ExportFunctionOptions) ⇒ T`
 
 Portable access to Firefox's [`exportFunction`][exportFunction] function, which
 returns a version of the supplied function that can be executed in the provided
@@ -159,8 +201,16 @@ context.
 ```javascript
 function log () { }
 
-GMCompat.unsafeWindow.log = GMCompat.exportFunction(log, GMCompat.unsafeWindow)
+GMCompat.unsafeWindow.log = GMCompat.exportFunction(log)
 ```
+
+If no options are supplied, the default values are:
+
+```javascript
+{ allowCrossOriginArguments: false, target: GMCompat.unsafeWindow }
+```
+
+If supplied, they are merged into/override the defaults.
 
 ## unsafeWindow
 
@@ -169,12 +219,32 @@ in userscripts, which is an isolated wrapper of the original window (i.e. the
 page's `window` can't see properties of the userscript's `window`).
 
 ```javascript
-GMCompat.unsafeWindow.maybeLog = GMCompat.unsafeWindow.noLog
+GMCompat.unsafeWindow.log = GMCompat.unsafeWindow.noop
 ```
 
 Note that accessing `unsafeWindow` directly, AKA `window.unsafeWindow`, does
 *not* work in all engines, so this should be used instead if scripts are to be
 run portably.
+
+## unwrap
+
+**Type**: `<T extends object>(object: T) ⇒ T`
+
+Takes a wrapped object and returns its wrapped value. This is sometimes needed
+when working with values transferred from the page to the userscript.
+
+```javascript
+let result
+
+function callback (value) {
+    result = value // may be wrapped (page -> userscript)
+}
+
+const $callback = GMCompat.export(callback)
+
+GMCompat.unsafeWindow.onResult($callback)
+result = GMCompat.unwrap(result)
+```
 
 # COMPATIBILITY
 
