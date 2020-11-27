@@ -36,7 +36,7 @@ gm-compat - portable monkey-patching for userscripts
   - [`unsafeWindow`][unsafeWindow]
   - [`cloneInto`][cloneInto]
   - [`exportFunction`][exportFunction]
-- ~ 800 B minified
+- ~ 700 B minified
 - CDN build ([jsDelivr][])
 
 # USAGE
