@@ -3,11 +3,9 @@
 const GMCompat = (function () {
     let $unsafeWindow = unsafeWindow
 
-    // minification helpers
-    const { assign, freeze } = Object
-    const $function = 'function'
-
+    const { assign, freeze } = Object // minification helpers
     const { wrappedJSObject } = $unsafeWindow // Violentmonkey for Firefox
+    const { slice } = []
 
     const GMCompat = {
         unsafeWindow: wrappedJSObject ?
@@ -33,23 +31,37 @@ const GMCompat = (function () {
      *
      * [1] https://git.io/JJziH
      */
-    if ((typeof cloneInto === $function) && (typeof exportFunction === $function)) { // Firefox or VM for Chrome
+    if ((typeof cloneInto === 'function') && (typeof exportFunction === 'function')) { // Firefox or VM for Chrome
         assign(GMCompat, {
+            apply ($this, fn, _args) {
+                // XXX Firefox doesn't seem to have implemented a cloner for the
+                // `arguments` object, so we need to convert it into an array
+                const args = slice.call(_args)
+                return fn.apply($this, this.cloneInto(args))
+            },
+
+            call ($this, fn, ..._args) {
+                const args = this.cloneInto(_args)
+                return fn.call($this, ...args)
+            },
+
             cloneInto (object, _options) {
-                const options = assign({}, CLONE_INTO, _options)
+                const options = _options ? assign({}, CLONE_INTO, _options) : CLONE_INTO
                 // cloneInto ignores the extra `target` option
                 return cloneInto(object, options.target, options)
             },
 
             exportFunction (fn, _options) {
-                const options = assign({}, EXPORT_FUNCTION, _options)
+                const options = _options ? assign({}, EXPORT_FUNCTION, _options) : EXPORT_FUNCTION
                 // exportFunction ignores the extra `target` option
                 return exportFunction(fn, options.target, options)
             },
         })
     } else { // Chrome (excluding Violentmonkey for Chrome)
         assign(GMCompat, {
-            cloneInto: (object => object),
+            apply: ($this, fn, args) => fn.apply($this, args),
+            call: ($this, fn, ...args) => fn.call($this, ...args),
+            cloneInto: object => object,
 
             exportFunction (fn, { defineAs, target = $unsafeWindow } = {}) {
                 if (defineAs) {
@@ -63,7 +75,7 @@ const GMCompat = (function () {
 
     assign(GMCompat, {
         export (value, options) {
-            return (typeof value === $function)
+            return (typeof value === 'function')
                 ? this.exportFunction(value, options)
                 : this.cloneInto(value, options)
         },

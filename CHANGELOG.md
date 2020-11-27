@@ -1,3 +1,7 @@
+## 1.1.0 - TBD
+
+- add `apply` and `call` helpers to safely call page functions
+
 ## 1.0.0 - 2020-11-21
 
 ### Breaking Changes

@@ -10,6 +10,8 @@
   - [Why not?](#why-not)
 - [TYPES](#types)
 - [API](#api)
+  - [apply](#apply)
+  - [call](#call)
   - [cloneInto](#cloneinto)
   - [export](#export)
   - [exportFunction](#exportfunction)
@@ -34,7 +36,7 @@ gm-compat - portable monkey-patching for userscripts
   - [`unsafeWindow`][unsafeWindow]
   - [`cloneInto`][cloneInto]
   - [`exportFunction`][exportFunction]
-- ~ 600 B minified
+- ~ 800 B minified
 - CDN build ([jsDelivr][])
 
 # USAGE
@@ -50,12 +52,14 @@ gm-compat - portable monkey-patching for userscripts
 const xhrProto = GMCompat.unsafeWindow.XMLHttpRequest.prototype
 const oldOpen = xhrProto.open
 
-function open (method, url, ...rest) {
-    this.addEventListener('load', () => {
-        process(this.responseText)
-    })
+function open (method, url) {
+    if (url === TARGET) {
+        this.addEventListener('load', () => {
+            process(this.responseText)
+        })
+    }
 
-    return oldOpen.call(this, method, url, ...rest)
+    GMCompat.apply(this, oldOpen, arguments)
 }
 
 xhrProto.open = GMCompat.export(open)
@@ -124,9 +128,58 @@ type ExportFunctionOptions = {
 
 # API
 
+## apply
+
+**Type**: `<T extends any[], R>($this: any, fn: ((...args: ...T) => R), args: T) => R`
+
+Safely call a page function from a script with an `arguments` object or array
+of arguments from the script context. This is needed to avoid security errors
+when passing arguments from the script to the page, e.g.:
+
+This doesn't work:
+
+```javascript
+function open (method, url) {
+    if (url === TARGET) // ...
+
+    // XXX Error: Permission denied to access property "length"
+    oldOpen.apply(this, arguments)
+}
+```
+
+This works:
+
+```javascript
+function open (method, url) {
+    // ...
+    GMCompat.apply(this, oldOpen, arguments) // OK
+}
+```
+
+## call
+
+**Type**: `<T extends any[], R>($this: any, fn: ((...args: ...T) => R), ...args: ...T) => R`
+
+Safely call a page function from a script with arguments from the script
+context. This is needed to avoid security errors when passing arguments from
+the script to the page, e.g.:
+
+This doesn't work:
+
+```javascript
+// XXX Error: Permission denied to access property "value"
+GMCompat.unsafeWindow.notify('loaded', { value: 42 })
+```
+
+This works:
+
+```javascript
+GMCompat.call(undefined, GMCompat.unsafeWindow.notify, 'loaded', { value: 42 }) // OK
+```
+
 ## cloneInto
 
-**Type**: `<T extends object>(object: T, options?: CloneIntoOptions) ⇒ T`
+**Type**: `<T extends object>(object: T, options?: CloneIntoOptions) => T`
 
 Portable access to Firefox's [`cloneInto`][cloneInto] function, which returns a
 version of the supplied object that can be accessed in the provided context.
@@ -150,8 +203,8 @@ If supplied, they are merged into/override the defaults.
 ## export
 
 **Type**:
-- `<T extends Function>(value: T, options?: ExportOptions) ⇒ T`
-- `<T extends object>(value: T, options?: ExportOptions) ⇒ T`
+- `<T extends Function>(value: T, options?: ExportOptions) => T`
+- `<T extends object>(value: T, options?: ExportOptions) => T`
 
 A wrapper function which delegates to [`cloneInto`](#cloneinto) or
 [`exportFunction`](#exportFunction), depending on the type of its argument,
@@ -192,7 +245,7 @@ GMCompat.export(obj, { target: iframe })
 
 ## exportFunction
 
-**Type**: `<T extends Function>(value: T, options?: ExportFunctionOptions) ⇒ T`
+**Type**: `<T extends Function>(value: T, options?: ExportFunctionOptions) => T`
 
 Portable access to Firefox's [`exportFunction`][exportFunction] function, which
 returns a version of the supplied function that can be executed in the provided
@@ -214,6 +267,8 @@ If supplied, they are merged into/override the defaults.
 
 ## unsafeWindow
 
+**Type**: `Window`
+
 Portable access to the page's window. This is distinct from the `window` object
 in userscripts, which is an isolated wrapper of the original window (i.e. the
 page's `window` can't see properties of the userscript's `window`).
@@ -228,7 +283,7 @@ run portably.
 
 ## unwrap
 
-**Type**: `<T extends object>(object: T) ⇒ T`
+**Type**: `<T extends object>(object: T) => T`
 
 Takes a wrapped object and returns its wrapped value. This is sometimes needed
 when working with values transferred from the page to the userscript.
@@ -271,7 +326,15 @@ The following NPM scripts are available:
 
 # SEE ALSO
 
+<!-- TOC:ignore -->
+## Libraries
+
 - [gm4-polyfill][] - A polyfill for the GM4 API for GM3-compatible userscript engines
+
+<!-- TOC:ignore -->
+## Articles
+
+- [MDN - Sharing objects with page scripts][mdn-sharing]
 
 # VERSION
 
@@ -288,11 +351,12 @@ Copyright © 2020 by chocolateboy.
 This is free software; you can redistribute it and/or modify it under the
 terms of the [Artistic License 2.0](https://www.opensource.org/licenses/artistic-license-2.0.php).
 
-[cloneInto]: https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Language_Bindings/Components.utils.cloneInto
+[cloneInto]: https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Language_Bindings/Components.utils.cloneInto
 [csp]: https://github.com/violentmonkey/violentmonkey/issues/1001
-[exportFunction]: https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Language_Bindings/Components.utils.exportFunction
+[exportFunction]: https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Language_Bindings/Components.utils.exportFunction
 [gm4-polyfill]: https://github.com/greasemonkey/gm4-polyfill
 [grant-none]: https://github.com/greasemonkey/greasemonkey/issues/3015#issuecomment-436645719
 [jsDelivr]: https://cdn.jsdelivr.net/gh/chocolateboy/gm-compat@1.0.0/index.min.js
+[mdn-sharing]: https://developer.mozilla.org/docs/Mozilla/Add-ons/WebExtensions/Sharing_objects_with_page_scripts
 [unsafeWindow]: https://sourceforge.net/p/greasemonkey/wiki/unsafeWindow/
-[xhr#open]: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/open
+[xhr#open]: https://developer.mozilla.org/docs/Web/API/XMLHttpRequest/open
