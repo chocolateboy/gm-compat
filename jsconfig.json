@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "alwaysStrict": true,
+        "baseUrl": "./",
+        "checkJs": true,
+        "declarationMap": false,
+        "declaration": true,
+        "downlevelIteration": true,
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "extendedDiagnostics": true,
+        "module": "ESNext",
+        "moduleResolution": "node",
+        "newLine": "LF",
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": false,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "outDir": "dist",
+        "resolveJsonModule": true,
+        "removeComments": false,
+        "sourceMap": true,
+        "strict": true,
+        "target": "ESNext",
+        "typeRoots": [
+            "node_modules/@types"
+        ]
+    },
+    "exclude": ["./dist/*"]
+    "include": ["./index.d.ts", "./index.js", "./src/**/*.js"]
+}

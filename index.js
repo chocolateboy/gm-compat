@@ -1,3 +1,5 @@
+/// <reference types="greasemonkey" />
+
 const GMCompat = (function () {
     let $unsafeWindow = unsafeWindow
 

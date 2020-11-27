@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@types/greasemonkey@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@types/greasemonkey/-/greasemonkey-4.0.0.tgz#c09c79bb6b5a45e0ab1bd65d7eb37323b04813af"
+  integrity sha512-l9Gvm6Bx40J3gtHZ8DfmyKkfTZ80IMEgGv3qjIZE5kmj+cVmY1Zji9oYXLG93qARv+aTvAjZ3+lXoARAfb6MnA==
+
 "@types/q@^1.5.1":
   version "1.5.4"
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.4.tgz#15925414e0ad2cd765bfef58842f7e26a7accb24"
