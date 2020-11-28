@@ -130,11 +130,11 @@ type ExportFunctionOptions = {
 
 ## apply
 
-**Type**: `<T extends any[], R>($this: any, fn: ((...args: ...T) => R), args: T) => R`
+**Type**: `<A extends any[], R>($this: any, fn: ((...args: ...A) => R), args: A) => R`
 
-Safely call a page function from a script with an `arguments` object or array
-of arguments from the script context. This is needed to avoid security errors
-when passing arguments from the script to the page, e.g.:
+Safely call a page function with an `arguments` object or array of arguments
+from the script context. This is needed to avoid security errors when passing
+arguments from the script to the page, e.g.:
 
 This doesn't work:
 
@@ -158,11 +158,11 @@ function open (method, url) {
 
 ## call
 
-**Type**: `<T extends any[], R>($this: any, fn: ((...args: ...T) => R), ...args: ...T) => R`
+**Type**: `<A extends any[], R>($this: any, fn: ((...args: ...A) => R), ...args: ...A) => R`
 
-Safely call a page function from a script with arguments from the script
-context. This is needed to avoid security errors when passing arguments from
-the script to the page, e.g.:
+Safely call a page function with arguments from the script context. This is
+needed to avoid security errors when passing arguments from the script to the
+page, e.g.:
 
 This doesn't work:
 
@@ -245,7 +245,7 @@ GMCompat.export(obj, { target: iframe })
 
 ## exportFunction
 
-**Type**: `<T extends Function>(value: T, options?: ExportFunctionOptions) => T`
+**Type**: `<T extends Function>(fn: T, options?: ExportFunctionOptions) => T`
 
 Portable access to Firefox's [`exportFunction`][exportFunction] function, which
 returns a version of the supplied function that can be executed in the provided

@@ -9,7 +9,7 @@
 // [1] https://github.com/violentmonkey/violentmonkey/issues/1102
 // [2] https://github.com/greasemonkey/greasemonkey/issues/3093
 //
-const GMCompat = (function () {
+const GMCompat = (() => {
     let $unsafeWindow = unsafeWindow
 
     const { assign, freeze } = Object
@@ -22,20 +22,14 @@ const GMCompat = (function () {
             $unsafeWindow
     }
 
-    const CLONE_INTO = {
+    const CLONE_INTO_OPTIONS = {
         cloneFunctions: true,
         target: $unsafeWindow,
         wrapReflectors: true,
     }
 
-    const EXPORT_FUNCTION = {
+    const EXPORT_FUNCTION_OPTIONS = {
         target: $unsafeWindow,
-    }
-
-    const __cloneInto = object => object
-
-    const __exportFunction = (fn, { defineAs, target = $unsafeWindow } = {}) => {
-        return defineAs ? target[defineAs] = fn : fn
     }
 
     /*
@@ -46,8 +40,20 @@ const GMCompat = (function () {
      *
      * [1] https://git.io/JJziH
      */
-    const _cloneInto = typeof cloneInto === 'function' ? cloneInto : __cloneInto
-    const _exportFunction = typeof exportFunction === 'function' ? exportFunction : __exportFunction
+
+    const __cloneInto = object => object
+
+    const __exportFunction = (fn, { defineAs, target = $unsafeWindow } = {}) => {
+        return defineAs ? target[defineAs] = fn : fn
+    }
+
+    const _cloneInto = typeof cloneInto === 'function'
+        ? cloneInto
+        : __cloneInto
+
+    const _exportFunction = typeof exportFunction === 'function'
+        ? exportFunction
+        : __exportFunction
 
     assign(GMCompat, {
         apply ($this, fn, _args) {
@@ -63,19 +69,25 @@ const GMCompat = (function () {
         },
 
         cloneInto (object, _options) {
-            const options = _options ? assign({}, CLONE_INTO, _options) : CLONE_INTO
+            const options = _options
+                ? assign({}, CLONE_INTO_OPTIONS, _options)
+                : CLONE_INTO_OPTIONS
+
             // cloneInto ignores the extra `target` option
             return _cloneInto(object, options.target, options)
         },
 
         export (value, options) {
-            return (typeof value === 'function')
+            return typeof value === 'function'
                 ? this.exportFunction(value, options)
                 : this.cloneInto(value, options)
         },
 
         exportFunction (fn, _options) {
-            const options = _options ? assign({}, EXPORT_FUNCTION, _options) : EXPORT_FUNCTION
+            const options = _options
+                ? assign({}, EXPORT_FUNCTION_OPTIONS, _options)
+                : EXPORT_FUNCTION_OPTIONS
+
             // exportFunction ignores the extra `target` option
             return _exportFunction(fn, options.target, options)
         },
