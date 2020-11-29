@@ -53,7 +53,7 @@ $ npm install gm-compat
 // @name          My Userscript
 // @description   A userscript which hooks XMLHttpRequest#open
 // @include       https://www.example.com/*
-// @require       https://unpkg.com/gm-compat@1.0.0
+// @require       https://unpkg.com/gm-compat@1.1.0
 // ==/UserScript==
 
 const xhrProto = GMCompat.unsafeWindow.XMLHttpRequest.prototype
@@ -350,7 +350,7 @@ The following NPM scripts are available:
 
 # VERSION
 
-1.0.0
+1.1.0
 
 # AUTHOR
 
@@ -369,9 +369,9 @@ terms of the [Artistic License 2.0](https://www.opensource.org/licenses/artistic
 [gm4-polyfill]: https://github.com/greasemonkey/gm4-polyfill
 [gm-storage]: https://www.npmjs.com/package/gm-storage
 [grant-none]: https://github.com/greasemonkey/greasemonkey/issues/3015#issuecomment-436645719
-[jsDelivr]: https://cdn.jsdelivr.net/npm/gm-compat@1.0.0/dist/index.iife.min.js
+[jsDelivr]: https://cdn.jsdelivr.net/npm/gm-compat@1.1.0/dist/index.iife.min.js
 [mdn-sharing]: https://developer.mozilla.org/docs/Mozilla/Add-ons/WebExtensions/Sharing_objects_with_page_scripts
 [UnCommonJS]: https://www.npmjs.com/package/@chocolateboy/uncommonjs
-[unpkg]: https://unpkg.com/gm-compat@1.0.0/dist/index.iife.min.js
+[unpkg]: https://unpkg.com/gm-compat@1.1.0/dist/index.iife.min.js
 [unsafeWindow]: https://sourceforge.net/p/greasemonkey/wiki/unsafeWindow/
 [xhr#open]: https://developer.mozilla.org/docs/Web/API/XMLHttpRequest/open

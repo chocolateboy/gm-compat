@@ -1,4 +1,4 @@
-## 1.1.0 - TBD
+## 1.1.0 - 2020-11-29
 
 - add `apply` and `call` helpers to safely call page functions
 - release to NPM - this simplifies the URLs for [inclusion on GreasyFork](https://greasyfork.org/en/help/external-scripts)
