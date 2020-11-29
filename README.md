@@ -1,5 +1,7 @@
 # gm-compat
 
+[![NPM Version](https://img.shields.io/npm/v/gm-compat.svg)](https://www.npmjs.org/package/gm-compat)
+
 <!-- TOC -->
 
 - [NAME](#name)
