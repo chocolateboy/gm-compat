@@ -4,6 +4,7 @@
 
 - [NAME](#name)
 - [FEATURES](#features)
+- [INSTALLATION](#installation)
 - [USAGE](#usage)
 - [DESCRIPTION](#description)
   - [Why?](#why)
@@ -36,8 +37,14 @@ gm-compat - portable monkey-patching for userscripts
   - [`unsafeWindow`][unsafeWindow]
   - [`cloneInto`][cloneInto]
   - [`exportFunction`][exportFunction]
-- ~ 700 B minified
-- CDN build ([jsDelivr][])
+- ~ 750 B minified
+- CDN builds ([unpkg][], [jsDelivr][])
+
+# INSTALLATION
+
+```
+$ npm install gm-compat
+```
 
 # USAGE
 
@@ -46,7 +53,7 @@ gm-compat - portable monkey-patching for userscripts
 // @name          My Userscript
 // @description   A userscript which hooks XMLHttpRequest#open
 // @include       https://www.example.com/*
-// @require       https://cdn.jsdelivr.net/gh/chocolateboy/gm-compat@1.0.0/index.min.js
+// @require       https://unpkg.com/gm-compat@1.0.0
 // ==/UserScript==
 
 const xhrProto = GMCompat.unsafeWindow.XMLHttpRequest.prototype
@@ -319,8 +326,11 @@ gm-compat has been tested on the following engines:
 
 The following NPM scripts are available:
 
-- build - generate the minified build of the library (index.min.js)
+- build - compile the library and save to the target directory
 - build:doc - generate the README's TOC (table of contents)
+- build:release - compile the library for release and save to the target directory
+- clean - remove the target directory and its contents
+- rebuild - clean the target directory and recompile the library
 
 </details>
 
@@ -329,7 +339,9 @@ The following NPM scripts are available:
 <!-- TOC:ignore -->
 ## Libraries
 
-- [gm4-polyfill][] - A polyfill for the GM4 API for GM3-compatible userscript engines
+- [gm4-polyfill][] - a polyfill for the GM4 API for GM3-compatible userscript engines
+- [gm-storage][] - an ES6 Map wrapper for the synchronous userscript storage API
+- [UnCommonJs][] - a minimum viable shim for `module.exports`
 
 <!-- TOC:ignore -->
 ## Articles
@@ -355,8 +367,11 @@ terms of the [Artistic License 2.0](https://www.opensource.org/licenses/artistic
 [csp]: https://github.com/violentmonkey/violentmonkey/issues/1001
 [exportFunction]: https://developer.mozilla.org/docs/Mozilla/Tech/XPCOM/Language_Bindings/Components.utils.exportFunction
 [gm4-polyfill]: https://github.com/greasemonkey/gm4-polyfill
+[gm-storage]: https://www.npmjs.com/package/gm-storage
 [grant-none]: https://github.com/greasemonkey/greasemonkey/issues/3015#issuecomment-436645719
-[jsDelivr]: https://cdn.jsdelivr.net/gh/chocolateboy/gm-compat@1.0.0/index.min.js
+[jsDelivr]: https://cdn.jsdelivr.net/npm/gm-compat@1.0.0/dist/index.iife.min.js
 [mdn-sharing]: https://developer.mozilla.org/docs/Mozilla/Add-ons/WebExtensions/Sharing_objects_with_page_scripts
+[UnCommonJS]: https://www.npmjs.com/package/@chocolateboy/uncommonjs
+[unpkg]: https://unpkg.com/gm-compat@1.0.0/dist/index.iife.min.js
 [unsafeWindow]: https://sourceforge.net/p/greasemonkey/wiki/unsafeWindow/
 [xhr#open]: https://developer.mozilla.org/docs/Web/API/XMLHttpRequest/open

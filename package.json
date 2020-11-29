@@ -5,34 +5,50 @@
     "author": "chocolateboy",
     "repository": "https://github.com/chocolateboy/gm-compat",
     "license": "Artistic-2.0",
-    "main": "index.js",
-    "jsdelivr": "index.min.js",
+    "main": "dist/index.js",
+    "module": "dist/index.esm.js",
+    "jsdelivr": "dist/index.iife.min.js",
+    "unpkg": "dist/index.iife.min.js",
     "scripts": {
-        "build": "terser --ecma 2015 --compress --mangle -o index.min.js < index.js",
+        "build": "cross-env NODE_ENV=production bili --module-name GMCompat --no-map --format cjs,esm,umd,umd-min,iife,iife-min -d dist src/index.js",
         "build:doc": "toc-md README.md",
-        "prepublishOnly": "run-s build build:doc"
+        "build:release": "run-p build build:doc",
+        "clean": "shx rm -rf dist",
+        "prepublishOnly": "run-s clean build:release",
+        "rebuild": "run-s clean build"
     },
     "files": [
-        "index.js",
-        "index.min.js"
+        "dist/index.esm.js",
+        "dist/index.iife.js",
+        "dist/index.iife.min.js",
+        "dist/index.js",
+        "dist/index.umd.js",
+        "dist/index.umd.min.js"
     ],
+    "browserslist": "maintained node versions",
     "devDependencies": {
         "@types/greasemonkey": "^4.0.0",
-        "markdown-toc": "^1.2.0",
+        "bili": "^5.0.5",
+        "cross-env": "^7.0.2",
         "npm-run-all": "^4.1.5",
-        "terser": "^5.5.0",
+        "shx": "^0.3.3",
         "toc-md-alt": "^0.4.1"
     },
     "keywords": [
+        "cloneinto",
         "clone-into",
+        "exportfunction",
         "export-function",
         "greasemonkey",
+        "monkeypatch",
         "shim",
         "tampermonkey",
+        "unsafewindow",
         "unsafe-window",
         "userscript",
         "userscripts",
         "violentmonkey",
-        "wrapped-js-object"
+        "xhr",
+        "xmlhttprequest"
     ]
 }
