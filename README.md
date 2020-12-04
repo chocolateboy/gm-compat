@@ -139,7 +139,7 @@ type ExportFunctionOptions = {
 
 ## apply
 
-**Type**: `<A extends any[], R>($this: any, fn: ((...args: ...A) => R), args: A) => R`
+**Type**: `<A extends any[], R>($this: any, fn: ((...args: A) => R), args: A) => R`
 
 Safely call a page function with an `arguments` object or array of arguments
 from the script context. This is needed to avoid security errors when passing
@@ -167,7 +167,7 @@ function open (method, url) {
 
 ## call
 
-**Type**: `<A extends any[], R>($this: any, fn: ((...args: ...A) => R), ...args: ...A) => R`
+**Type**: `<A extends any[], R>($this: any, fn: ((...args: A) => R), ...A) => R`
 
 Safely call a page function with arguments from the script context. This is
 needed to avoid security errors when passing arguments from the script to the
