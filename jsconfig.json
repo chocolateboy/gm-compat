@@ -28,6 +28,6 @@
             "node_modules/@types"
         ]
     },
-    "exclude": ["./dist/*"]
-    "include": ["./index.d.ts", "./index.js", "./src/**/*.js"]
+    "exclude": ["./dist/*"],
+    "include": ["./index.d.ts", "./index.js", "./src/**/*.js"],
 }
