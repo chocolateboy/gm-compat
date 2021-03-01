@@ -9,6 +9,7 @@
     "module": "dist/index.esm.js",
     "jsdelivr": "dist/index.iife.min.js",
     "unpkg": "dist/index.iife.min.js",
+    "types": "index.d.ts",
     "scripts": {
         "build": "cross-env NODE_ENV=production bili --module-name GMCompat --no-map --format cjs,esm,umd,umd-min,iife,iife-min -d dist src/index.js",
         "build:doc": "toc-md README.md",
@@ -18,18 +19,13 @@
         "rebuild": "run-s clean build"
     },
     "files": [
-        "dist/index.esm.js",
-        "dist/index.iife.js",
-        "dist/index.iife.min.js",
-        "dist/index.js",
-        "dist/index.umd.js",
-        "dist/index.umd.min.js"
+        "dist/*.{js,ts}",
+        "/index.d.ts"
     ],
     "browserslist": "maintained node versions",
     "devDependencies": {
-        "@types/greasemonkey": "^4.0.0",
         "bili": "^5.0.5",
-        "cross-env": "^7.0.2",
+        "cross-env": "^7.0.3",
         "npm-run-all": "^4.1.5",
         "shx": "^0.3.3",
         "toc-md-alt": "^0.4.1"

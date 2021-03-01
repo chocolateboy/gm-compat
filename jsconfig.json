@@ -10,6 +10,7 @@
         "esModuleInterop": true,
         "experimentalDecorators": true,
         "extendedDiagnostics": true,
+        "lib": ["ES2020", "DOM"],
         "module": "ESNext",
         "moduleResolution": "node",
         "newLine": "LF",
@@ -29,5 +30,5 @@
         ]
     },
     "exclude": ["./dist/*"],
-    "include": ["./index.d.ts", "./index.js", "./src/**/*.js"],
+    "include": ["./index.d.ts", "./*.js", "*.ts", "./src/**/*.js"],
 }

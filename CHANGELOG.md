@@ -1,3 +1,7 @@
+## 1.2.0 - TBD
+
+- add types
+
 ## 1.1.0 - 2020-11-29
 
 - add `apply` and `call` helpers to safely call page functions

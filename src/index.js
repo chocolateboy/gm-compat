@@ -1,4 +1,4 @@
-/// <reference types="greasemonkey" />
+/// <reference path="../index.d.ts" />
 
 // XXX although this is packaged in standard bundle formats (e.g. CommonJS and
 // ESM), the main/recommended format is an IIFE which declares GMCompat as a
@@ -10,7 +10,7 @@
 // [1] https://github.com/violentmonkey/violentmonkey/issues/1102
 // [2] https://github.com/greasemonkey/greasemonkey/issues/3093
 
-let $unsafeWindow = unsafeWindow
+let $unsafeWindow = typeof unsafeWindow !== 'undefined' ? unsafeWindow : window
 
 const { assign, freeze } = Object
 const { wrappedJSObject } = $unsafeWindow // Violentmonkey for Firefox
