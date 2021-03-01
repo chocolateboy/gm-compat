@@ -1,0 +1,36 @@
+name: publish
+
+on:
+  push:
+    branches:
+      - "!*"
+    tags:
+      - "v*"
+
+env:
+  CI: true
+
+jobs:
+  publish:
+    name: 'Publish to NPM'
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: set up node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: install
+        run: yarn install --prefer-offline
+
+      - name: test
+        run: yarn run prepublishOnly
+
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          access: public
+          token: ${{ secrets.NPM_TOKEN }}
